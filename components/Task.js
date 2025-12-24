@@ -1,10 +1,14 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Calendar, Edit, Pencil } from "lucide-react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import EditTaskMenu from "./EditTaskMenu";
 import { Modal } from "react-native";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Task = ({ task }) => {
+  const { colors, toggleTheme } = useContext(ThemeContext);
+  const styles = getStyles(colors);
+
   const [editTaskMenu, setEditTaskMenu] = useState(false);
 
   const data = task.date;
@@ -28,7 +32,7 @@ const Task = ({ task }) => {
           <View
             style={{
               padding: 5,
-              backgroundColor: "#e6e6e6ff",
+              backgroundColor: colors.background,
               borderRadius: 10,
             }}
           >
@@ -49,51 +53,55 @@ const Task = ({ task }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#1A1A1A",
-    padding: 25,
-    borderRadius: 30,
-    gap: 15,
-    width: "100%",
-  },
+const getStyles = (colors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.taskBackground,
+      padding: 25,
+      borderRadius: 30,
+      gap: 15,
+      width: "100%",
+      borderWidth: 1,
+      borderColor: colors.borderColor,
+      elevation: 2,
+    },
 
-  dateContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "transparent",
-  },
+    dateContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "transparent",
+    },
 
-  calenderDiv: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 7,
-  },
+    calenderDiv: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 7,
+    },
 
-  text: {
-    color: "#E6E6E6",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
+    text: {
+      color: colors.text,
+      fontSize: 30,
+      fontWeight: "bold",
+    },
 
-  descText: {
-    color: "#E6E6E6",
-    fontSize: 20,
-  },
+    descText: {
+      color: colors.text,
+      fontSize: 20,
+    },
 
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.7)", // dim background
-  },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.7)", // dim background
+    },
 
-  modalContainer: {
-    position: "absolute",
-    top: "20%",
-    left: 0,
-    right: 0,
-    alignItems: "center",
-  },
-});
+    modalContainer: {
+      position: "absolute",
+      top: "20%",
+      left: 0,
+      right: 0,
+      alignItems: "center",
+    },
+  });
 
 export default Task;

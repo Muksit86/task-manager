@@ -1,33 +1,40 @@
-import { View, Text, StyleSheet } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
-import React from 'react'
-import { Sun, SunDim } from 'lucide-react-native';
+import React, { useContext } from "react";
+import { Sun, SunDim } from "lucide-react-native";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Nav = () => {
+  const { colors, toggleTheme } = useContext(ThemeContext);
+  const styles = getStyles(colors);
+
   return (
-   <View style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.text}>Hi Muksit,</Text>
-      <Sun color="white" size={40} />
+      <Pressable onPress={toggleTheme}>
+        <Sun color="white" size={40} />
+      </Pressable>
     </View>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#1A1A1A',
-    padding: 20,
-    borderRadius: 100,
-    width: '90%',
-  },
-  text: {
-    color: '#E6E6E6',
-    fontSize: 30,
-    fontWeight: '500',
-  },
-});
+const getStyles = (colors) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: colors.background,
+      padding: 20,
+      borderRadius: 100,
+      width: "90%",
+    },
+    text: {
+      color: colors.text,
+      fontSize: 30,
+      fontWeight: "500",
+    },
+  });
 
-export default Nav
+export default Nav;

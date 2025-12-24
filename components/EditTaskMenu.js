@@ -13,8 +13,12 @@ import {
   DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
 import { TaskContext } from "../context/TaskContext";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function AddTaskMenu({ task, setEditTaskMenu }) {
+  const { colors, toggleTheme } = useContext(ThemeContext);
+  const styles = getStyles(colors);
+
   const { tasks, setTask } = useContext(TaskContext);
 
   const [editTask, seteditTask] = useState({
@@ -103,58 +107,59 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    width: "80%",
-    borderRadius: 50,
-    padding: 10,
-  },
+const getStyles = (colors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.background,
+      width: "80%",
+      borderRadius: 50,
+      padding: 10,
+    },
 
-  buttonsView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
+    buttonsView: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 10,
+    },
 
-  saveButton: {
-    backgroundColor: "#1A1A1A",
-    padding: 20,
-    borderRadius: 100,
-  },
+    saveButton: {
+      backgroundColor: colors.background,
+      padding: 20,
+      borderRadius: 100,
+    },
 
-  closeButton: {
-    backgroundColor: "#FF6262",
-    padding: 20,
-    borderRadius: 100,
-  },
+    closeButton: {
+      backgroundColor: "#FF6262",
+      padding: 20,
+      borderRadius: 100,
+    },
 
-  titleInput: {
-    borderWidth: 1,
-    borderColor: "gray",
-    backgroundColor: "#f0f0f0",
-    height: 300,
-    fontSize: 20,
-    marginVertical: 20,
-    textAlignVertical: "top",
-    padding: 10,
-    marginBottom: 35,
-  },
+    titleInput: {
+      borderWidth: 1,
+      borderColor: "gray",
+      backgroundColor: colors.background,
+      height: 300,
+      fontSize: 20,
+      marginVertical: 20,
+      textAlignVertical: "top",
+      padding: 10,
+      marginBottom: 35,
+    },
 
-  addCalenderBtn: {
-    width: "60%",
-    marginHorizontal: "auto",
-    backgroundColor: "#1A1A1A",
-    borderRadius: 100,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    padding: 20,
-  },
+    addCalenderBtn: {
+      width: "60%",
+      marginHorizontal: "auto",
+      backgroundColor: colors.background,
+      borderRadius: 100,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 10,
+      padding: 20,
+    },
 
-  addCalenderText: {
-    fontSize: 24,
-    color: "white",
-  },
-});
+    addCalenderText: {
+      fontSize: 24,
+      color: "white",
+    },
+  });

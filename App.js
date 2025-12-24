@@ -1,10 +1,13 @@
-import { TaskProvider } from './context/TaskContext';
-import MainApp from './MainApp';
+import { TaskProvider } from "./context/TaskContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import MainApp from "./MainApp";
 
 export default function App() {
   return (
-    <TaskProvider>
-      <MainApp />
-    </TaskProvider>
+    <ThemeProvider>
+      <TaskProvider>
+        <MainApp />
+      </TaskProvider>
+    </ThemeProvider>
   );
 }

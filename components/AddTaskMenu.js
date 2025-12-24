@@ -1,33 +1,46 @@
-import { Alert, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { use, useContext, useState } from 'react'
-import { Calendar, Save, X } from 'lucide-react-native'
-import { DateTimePicker, DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import { TaskContext } from '../context/TaskContext';
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import React, { use, useContext, useState } from "react";
+import { Calendar, Save, X } from "lucide-react-native";
+import {
+  DateTimePicker,
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
+import { TaskContext } from "../context/TaskContext";
+import { ThemeContext } from "../context/ThemeContext";
 
+export default function AddTaskMenu({ setaddTaskMenu }) {
+  const { colors, toggleTheme } = useContext(ThemeContext);
+  const styles = getStyles(colors);
 
-
-export default function AddTaskMenu({setaddTaskMenu}) {
-  const {tasks, setTask} = useContext(TaskContext);
+  const { tasks, setTask } = useContext(TaskContext);
 
   const [newTask, setNewTask] = useState({
     id: null,
     date: new Date(),
-    title: '',
+    title: "",
   });
-  
+
   const openDatePicker = () => {
-  if (Platform.OS !== 'android') return;
-  
-  DateTimePickerAndroid.open({
-    value: new Date(),
-    mode: 'date',
-    display: 'default',
-    minimumDate: new Date(),
-    is24Hour: true,
-    onChange: (event, selectedDate) => {
-      if (event.type === 'set' && selectedDate) {
-        setNewTask((prev) => ({
-              ...prev,
+    if (Platform.OS !== "android") return;
+
+    DateTimePickerAndroid.open({
+      value: new Date(),
+      mode: "date",
+      display: "default",
+      minimumDate: new Date(),
+      is24Hour: true,
+      onChange: (event, selectedDate) => {
+        if (event.type === "set" && selectedDate) {
+          setNewTask((prev) => ({
+            ...prev,
             date: selectedDate,
           }));
         }
@@ -36,102 +49,111 @@ export default function AddTaskMenu({setaddTaskMenu}) {
   };
 
   const handleSaveTask = () => {
-
     if (newTask.title.trim().length === 0) {
       Alert.alert("Missing title", "Task title is required");
       return;
     }
 
-    setTask(prevTask => [
+    setTask((prevTask) => [
       ...prevTask,
       {
         id: prevTask.length + 1,
         title: newTask.title,
         date: newTask.date,
-      }
-    ])
+      },
+    ]);
     setaddTaskMenu(false);
-  }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.buttonsView}>
-        <Pressable style={styles.closeButton} onPress={()=> setaddTaskMenu(false)}>
-            <X size={40} color="white" />
+        <Pressable
+          style={styles.closeButton}
+          onPress={() => setaddTaskMenu(false)}
+        >
+          <X size={40} color="white" />
         </Pressable>
         <Pressable onPress={handleSaveTask} style={styles.saveButton}>
-            <Save size={40} color="white" />
+          <Save size={40} color="white" />
         </Pressable>
       </View>
 
-      <TextInput onChangeText={(text) => setNewTask((prev) => ({...prev, title: text}))} style={styles.titleInput} multiline placeholder="Enter your task"/>
+      <TextInput
+        onChangeText={(text) =>
+          setNewTask((prev) => ({ ...prev, title: text }))
+        }
+        style={styles.titleInput}
+        multiline
+        placeholder="Enter your task"
+      />
 
       <Pressable onPress={openDatePicker} style={styles.addCalenderBtn}>
-        <Calendar color="white" size={30}/>
+        <Calendar color="white" size={30} />
         <Text style={styles.addCalenderText}>Add Date</Text>
-      </Pressable  >
+      </Pressable>
     </View>
-  )
+  );
 }
 
-const styles = StyleSheet.create({
-  checkBorder: {  
-    borderWidth: 1,
-    borderColor: 'green',
-  },
+const getStyles = (colors) =>
+  StyleSheet.create({
+    checkBorder: {
+      borderWidth: 1,
+      borderColor: "green",
+    },
 
+    container: {
+      backgroundColor: colors.background,
+      width: "80%",
+      borderRadius: 50,
+      padding: 10,
+    },
 
-  container: {
-    backgroundColor: 'white',
-    width: '80%',
-    borderRadius: 50,
-    padding: 10,
-  },
+    buttonsView: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 10,
+    },
 
-  buttonsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
+    saveButton: {
+      backgroundColor: colors.background,
+      padding: 20,
+      borderRadius: 100,
+    },
 
-  saveButton: {
-    backgroundColor: '#1A1A1A',
-    padding: 20,
-    borderRadius: 100,
-  },
+    closeButton: {
+      backgroundColor: "#FF6262",
+      padding: 20,
+      borderRadius: 100,
+    },
 
-  closeButton: {
-    backgroundColor: '#FF6262',
-    padding: 20,
-    borderRadius: 100,
-  },
+    titleInput: {
+      borderWidth: 1,
+      borderColor: "gray",
+      backgroundColor: colors.background,
+      height: 300,
+      fontSize: 20,
+      marginVertical: 20,
+      textAlignVertical: "top",
+      padding: 10,
+      marginBottom: 35,
+    },
 
-  titleInput: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    backgroundColor: '#f0f0f0',
-    height: 300,
-    fontSize: 20,
-    marginVertical: 20,
-    textAlignVertical: 'top',
-    padding: 10,
-    marginBottom: 35,
-  },
+    addCalenderBtn: {
+      width: "60%",
+      marginHorizontal: "auto",
+      backgroundColor: colors.background,
+      borderRadius: 100,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 10,
+      padding: 20,
+    },
 
-  addCalenderBtn: {
-    width: '60%',
-    marginHorizontal: 'auto',
-    backgroundColor: '#1A1A1A',
-    borderRadius: 100,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-    padding: 20,
-  },
-
-  addCalenderText: {
-    fontSize: 24,
-    color: 'white',
-  }
-})
+    addCalenderText: {
+      fontSize: 24,
+      color: "white",
+    },
+  });
