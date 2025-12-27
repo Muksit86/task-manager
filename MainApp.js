@@ -1,28 +1,19 @@
-import {
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Modal,
-  ScrollView,
-  Dimensions,
-  FlatList,
-} from "react-native";
+import { Pressable, StyleSheet, View, Modal, FlatList } from "react-native";
 import Nav from "./components/Nav";
 import Task from "./components/Task";
 import AddButton from "./components/AddButton";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AddTaskMenu from "./components/AddTaskMenu";
 import { TaskContext } from "./context/TaskContext.js";
 import { ThemeContext } from "./context/ThemeContext.js";
+import { getAllTasks, initDb } from "./database/TaskDb.js";
 
 export default function MainApp() {
-  const { colors, toggleTheme } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
   const [addTaskMenu, setaddTaskMenu] = useState(false);
-  const [selectedTaskId, setSelectedTaskId] = useState(null);
-  const { tasks, setTask } = useContext(TaskContext);
+  const { tasks } = useContext(TaskContext);
 
   const onPressFunction = () => {
     setaddTaskMenu(!addTaskMenu);

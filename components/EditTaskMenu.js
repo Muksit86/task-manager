@@ -110,7 +110,7 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
 const getStyles = (colors) =>
   StyleSheet.create({
     container: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.createTaskBackground,
       width: "80%",
       borderRadius: 50,
       padding: 10,
@@ -123,7 +123,7 @@ const getStyles = (colors) =>
     },
 
     saveButton: {
-      backgroundColor: colors.background,
+      backgroundColor: "black",
       padding: 20,
       borderRadius: 100,
     },
@@ -137,7 +137,7 @@ const getStyles = (colors) =>
     titleInput: {
       borderWidth: 1,
       borderColor: "gray",
-      backgroundColor: colors.background,
+      backgroundColor: colors.createTaskBackground,
       height: 300,
       fontSize: 20,
       marginVertical: 20,
@@ -149,7 +149,7 @@ const getStyles = (colors) =>
     addCalenderBtn: {
       width: "60%",
       marginHorizontal: "auto",
-      backgroundColor: colors.background,
+      backgroundColor: "black",
       borderRadius: 100,
       flexDirection: "row",
       justifyContent: "center",

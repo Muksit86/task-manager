@@ -24,7 +24,7 @@ const getStyles = (colors) =>
       width: "100%",
     },
     text: {
-      color: colors.text,
+      color: "white",
       fontSize: 20,
       fontWeight: "500",
     },

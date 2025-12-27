@@ -11,12 +11,6 @@ const Task = ({ task }) => {
 
   const [editTaskMenu, setEditTaskMenu] = useState(false);
 
-  const data = task.date;
-  const date = new Date(data).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-  });
-
   const handleEditTask = () => {
     setEditTaskMenu(true);
   };
@@ -25,14 +19,14 @@ const Task = ({ task }) => {
     <View style={styles.container}>
       <View style={styles.dateContainer}>
         <View style={styles.calenderDiv}>
-          <Calendar color="white" />
-          <Text style={styles.text}>{date}</Text>
+          <Calendar color="black" />
+          <Text style={styles.text}>{task.date}</Text>
         </View>
         <Pressable onPress={handleEditTask}>
           <View
             style={{
-              padding: 5,
-              backgroundColor: colors.background,
+              padding: 6,
+              backgroundColor: "hsla(0, 0%, 90%, 1.00)",
               borderRadius: 10,
             }}
           >
@@ -61,8 +55,6 @@ const getStyles = (colors) =>
       borderRadius: 30,
       gap: 15,
       width: "100%",
-      borderWidth: 1,
-      borderColor: colors.borderColor,
       elevation: 2,
     },
 
@@ -80,13 +72,13 @@ const getStyles = (colors) =>
     },
 
     text: {
-      color: colors.text,
+      color: "black",
       fontSize: 30,
       fontWeight: "bold",
     },
 
     descText: {
-      color: colors.text,
+      color: "black",
       fontSize: 20,
     },
 

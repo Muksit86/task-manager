@@ -7,20 +7,18 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { use, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Calendar, Save, X } from "lucide-react-native";
-import {
-  DateTimePicker,
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { TaskContext } from "../context/TaskContext";
 import { ThemeContext } from "../context/ThemeContext";
+import { addTask, getAllTasks } from "../database/TaskDb";
 
 export default function AddTaskMenu({ setaddTaskMenu }) {
   const { colors, toggleTheme } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
-  const { tasks, setTask } = useContext(TaskContext);
+  const { tasks, addTask } = useContext(TaskContext);
 
   const [newTask, setNewTask] = useState({
     id: null,
@@ -48,20 +46,24 @@ export default function AddTaskMenu({ setaddTaskMenu }) {
     });
   };
 
-  const handleSaveTask = () => {
+  const handleSaveTask = async () => {
     if (newTask.title.trim().length === 0) {
       Alert.alert("Missing title", "Task title is required");
       return;
     }
 
-    setTask((prevTask) => [
-      ...prevTask,
-      {
-        id: prevTask.length + 1,
-        title: newTask.title,
-        date: newTask.date,
-      },
-    ]);
+    try {
+      const id = Date.now().toString();
+      const date = newTask.date.toLocaleDateString("en-GB", {
+        month: "short",
+        day: "numeric",
+      });
+
+      await addTask(newTask.title, date);
+    } catch (error) {
+      console.log(error);
+    }
+
     setaddTaskMenu(false);
   };
 
@@ -74,6 +76,7 @@ export default function AddTaskMenu({ setaddTaskMenu }) {
         >
           <X size={40} color="white" />
         </Pressable>
+
         <Pressable onPress={handleSaveTask} style={styles.saveButton}>
           <Save size={40} color="white" />
         </Pressable>
@@ -104,7 +107,7 @@ const getStyles = (colors) =>
     },
 
     container: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.createTaskBackground,
       width: "80%",
       borderRadius: 50,
       padding: 10,
@@ -117,7 +120,7 @@ const getStyles = (colors) =>
     },
 
     saveButton: {
-      backgroundColor: colors.background,
+      backgroundColor: "black",
       padding: 20,
       borderRadius: 100,
     },
@@ -131,19 +134,20 @@ const getStyles = (colors) =>
     titleInput: {
       borderWidth: 1,
       borderColor: "gray",
-      backgroundColor: colors.background,
+      backgroundColor: colors.createTaskBackground,
       height: 300,
       fontSize: 20,
       marginVertical: 20,
       textAlignVertical: "top",
       padding: 10,
       marginBottom: 35,
+      color: colors.text,
     },
 
     addCalenderBtn: {
       width: "60%",
       marginHorizontal: "auto",
-      backgroundColor: colors.background,
+      backgroundColor: "black",
       borderRadius: 100,
       flexDirection: "row",
       justifyContent: "center",

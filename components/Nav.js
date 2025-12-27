@@ -13,7 +13,7 @@ const Nav = () => {
     <View style={styles.container}>
       <Text style={styles.text}>Hi Muksit,</Text>
       <Pressable onPress={toggleTheme}>
-        <Sun color="white" size={40} />
+        <Sun color="black" size={40} />
       </Pressable>
     </View>
   );
@@ -25,13 +25,14 @@ const getStyles = (colors) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      backgroundColor: colors.background,
+      backgroundColor: "white",
       padding: 20,
       borderRadius: 100,
       width: "90%",
+      elevation: 4,
     },
     text: {
-      color: colors.text,
+      color: "black",
       fontSize: 30,
       fontWeight: "500",
     },
