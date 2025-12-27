@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, View, Modal, FlatList } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  Modal,
+  FlatList,
+  Button,
+} from "react-native";
 import Nav from "./components/Nav";
 import Task from "./components/Task";
 import AddButton from "./components/AddButton";
@@ -6,50 +13,70 @@ import { useContext, useEffect, useState } from "react";
 import AddTaskMenu from "./components/AddTaskMenu";
 import { TaskContext } from "./context/TaskContext.js";
 import { ThemeContext } from "./context/ThemeContext.js";
-import { getAllTasks, initDb } from "./database/TaskDb.js";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 export default function MainApp() {
-  const { colors } = useContext(ThemeContext);
-  const styles = getStyles(colors);
+  useEffect(() => {
+    async function requestPermission() {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission not granted");
+      }
+    }
 
-  const [addTaskMenu, setaddTaskMenu] = useState(false);
-  const { tasks } = useContext(TaskContext);
-
-  const onPressFunction = () => {
-    setaddTaskMenu(!addTaskMenu);
-  };
-
-  return (
-    <View style={styles.container}>
-      <Nav />
-
-      {tasks.length > 0 && (
-        <FlatList
-          style={styles.flatlist}
-          contentContainerStyle={{ gap: 10 }}
-          data={tasks}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <Task task={item} />}
-        />
-      )}
-
-      <Pressable onPress={onPressFunction} style={styles.addButton}>
-        <AddButton />
-      </Pressable>
-
-      <Modal visible={addTaskMenu} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <AddTaskMenu
-              addTaskMenu={addTaskMenu}
-              setaddTaskMenu={setaddTaskMenu}
-            />
-          </View>
-        </View>
-      </Modal>
-    </View>
-  );
+    requestPermission();
+  }, []);
 }
+
+const { colors } = useContext(ThemeContext);
+const styles = getStyles(colors);
+
+const [addTaskMenu, setaddTaskMenu] = useState(false);
+const { tasks } = useContext(TaskContext);
+
+const onPressFunction = () => {
+  setaddTaskMenu(!addTaskMenu);
+};
+
+return (
+  <View style={styles.container}>
+    <Nav />
+
+    {tasks.length > 0 && (
+      <FlatList
+        style={styles.flatlist}
+        contentContainerStyle={{ gap: 10 }}
+        data={tasks}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <Task task={item} />}
+      />
+    )}
+
+    <Pressable onPress={onPressFunction} style={styles.addButton}>
+      <AddButton />
+    </Pressable>
+
+    <Modal visible={addTaskMenu} transparent animationType="fade">
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <AddTaskMenu
+            addTaskMenu={addTaskMenu}
+            setaddTaskMenu={setaddTaskMenu}
+          />
+        </View>
+      </View>
+    </Modal>
+  </View>
+);
 
 const getStyles = (colors) =>
   StyleSheet.create({

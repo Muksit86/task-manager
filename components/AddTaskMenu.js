@@ -13,6 +13,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { TaskContext } from "../context/TaskContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { addTask, getAllTasks } from "../database/TaskDb";
+import { scheduleTaskNotification } from "../Notificatiions/Notification";
 
 export default function AddTaskMenu({ setaddTaskMenu }) {
   const { colors, toggleTheme } = useContext(ThemeContext);
@@ -60,6 +61,7 @@ export default function AddTaskMenu({ setaddTaskMenu }) {
       });
 
       await addTask(newTask.title, date);
+      await scheduleTaskNotification(newTask.date);
     } catch (error) {
       console.log(error);
     }
@@ -107,7 +109,7 @@ const getStyles = (colors) =>
     },
 
     container: {
-      backgroundColor: colors.createTaskBackground,
+      backgroundColor: colors.taskBackground,
       width: "80%",
       borderRadius: 50,
       padding: 10,
@@ -134,14 +136,14 @@ const getStyles = (colors) =>
     titleInput: {
       borderWidth: 1,
       borderColor: "gray",
-      backgroundColor: colors.createTaskBackground,
+      backgroundColor: colors.taskBackground,
       height: 300,
       fontSize: 20,
       marginVertical: 20,
       textAlignVertical: "top",
       padding: 10,
       marginBottom: 35,
-      color: colors.text,
+      color: "black",
     },
 
     addCalenderBtn: {

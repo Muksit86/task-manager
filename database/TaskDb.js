@@ -24,6 +24,18 @@ export const dbAddTask = async (id, title, date) => {
   ]);
 };
 
+export const dbUpdateTask = async (title, date, id) => {
+  await db.runAsync(`UPDATE tasks SET title = ?, date = ? WHERE id = ?`, [
+    title,
+    date,
+    id,
+  ]);
+};
+
+export const dbDeleteTaskById = async (id) => {
+  await db.runAsync(`DELETE FROM tasks WHERE id = ?`, [id]);
+};
+
 export const getAllTasks = async () => {
   const result = await db.getAllAsync(`SELECT * FROM tasks ORDER BY date DESC`);
   return result;

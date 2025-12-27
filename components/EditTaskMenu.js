@@ -16,10 +16,10 @@ import { TaskContext } from "../context/TaskContext";
 import { ThemeContext } from "../context/ThemeContext";
 
 export default function AddTaskMenu({ task, setEditTaskMenu }) {
-  const { colors, toggleTheme } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
-  const { tasks, setTask } = useContext(TaskContext);
+  const { tasks, updateTask, deleteTask } = useContext(TaskContext);
 
   const [editTask, seteditTask] = useState({
     id: task.id,
@@ -47,20 +47,26 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
     });
   };
 
-  const handleSaveTask = () => {
+  const handleSaveTask = async () => {
     if (editTask.title.trim().length > 0 && !editTask.date) {
       Alert.alert("Missing title", "Task title is required");
       return;
     }
 
-    setTask((prevTasks) =>
-      prevTasks.map((t) => (t.id === editTask.id ? editTask : t))
-    );
-    setEditTaskMenu(false);
+    try {
+      await updateTask(editTask.title, editTask.date, task.id);
+      setEditTaskMenu(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDeleteTask = (id) => {
-    setTask((prevTasks) => prevTasks.filter((t) => t.id !== id));
+  const handleDeleteTask = async (id) => {
+    try {
+      await deleteTask(id);
+    } catch (error) {
+      console.log(error);
+    }
     setEditTaskMenu(false);
   };
 
@@ -110,7 +116,7 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
 const getStyles = (colors) =>
   StyleSheet.create({
     container: {
-      backgroundColor: colors.createTaskBackground,
+      backgroundColor: colors.taskBackground,
       width: "80%",
       borderRadius: 50,
       padding: 10,
@@ -137,7 +143,7 @@ const getStyles = (colors) =>
     titleInput: {
       borderWidth: 1,
       borderColor: "gray",
-      backgroundColor: colors.createTaskBackground,
+      backgroundColor: colors.taskBackground,
       height: 300,
       fontSize: 20,
       marginVertical: 20,

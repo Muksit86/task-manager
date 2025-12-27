@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import {
   dbAddTask,
   dbDeleteTask,
+  dbDeleteTaskById,
+  dbUpdateTask,
   getAllTasks,
   initDb,
 } from "../database/TaskDb";
@@ -25,12 +27,25 @@ export const TaskProvider = ({ children }) => {
     await dbAddTask(id, title, date);
 
     const updatedTasks = await getAllTasks();
-    console.log(updatedTasks);
+    setTask(updatedTasks);
+  };
+
+  const updateTask = async (title, date, id) => {
+    await dbUpdateTask(title, date, id);
+
+    const updatedTasks = await getAllTasks();
+    setTask(updatedTasks);
+  };
+
+  const deleteTask = async (id) => {
+    await dbDeleteTaskById(id);
+
+    const updatedTasks = await getAllTasks();
     setTask(updatedTasks);
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask }}>
+    <TaskContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
       {children}
     </TaskContext.Provider>
   );

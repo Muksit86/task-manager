@@ -1,7 +1,6 @@
 // theme.js
 export const lightTheme = {
   taskBackground: "white",
-  createTaskBackground: "black",
   background: "hsla(0, 0%, 90%, 1.00)",
   text: "hsla(0, 0%, 10%, 1.00)",
   primary: "#0066FF",
@@ -9,7 +8,6 @@ export const lightTheme = {
 
 export const darkTheme = {
   taskBackground: "white",
-  createTaskBackground: "white",
   background: "hsla(0, 0%, 10%, 1.00)",
   text: "hsla(0, 0%, 90%, 1.00)",
   primary: "#0066FF",
