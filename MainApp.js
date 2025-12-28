@@ -14,6 +14,8 @@ import AddTaskMenu from "./components/AddTaskMenu";
 import { TaskContext } from "./context/TaskContext.js";
 import { ThemeContext } from "./context/ThemeContext.js";
 import * as Notifications from "expo-notifications";
+import WelcomeScreen from "./WelcomeScreen.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -35,56 +37,62 @@ export default function MainApp() {
 
     requestPermission();
   }, []);
-}
 
-const { colors } = useContext(ThemeContext);
-const styles = getStyles(colors);
+  const { colors } = useContext(ThemeContext);
+  const styles = getStyles(colors);
 
-const [addTaskMenu, setaddTaskMenu] = useState(false);
-const { tasks } = useContext(TaskContext);
+  const [addTaskMenu, setaddTaskMenu] = useState(false);
+  const { tasks } = useContext(TaskContext);
 
-const onPressFunction = () => {
-  setaddTaskMenu(!addTaskMenu);
-};
+  const onPressFunction = () => {
+    setaddTaskMenu(!addTaskMenu);
+  };
 
-return (
-  <View style={styles.container}>
-    <Nav />
+  const handleTest = async () => {
+    console.log("Working..");
+    await AsyncStorage.removeItem("username");
 
-    {tasks.length > 0 && (
-      <FlatList
-        style={styles.flatlist}
-        contentContainerStyle={{ gap: 10 }}
-        data={tasks}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <Task task={item} />}
-      />
-    )}
+    const value = await AsyncStorage.getItem("username");
+    console.log(value); // should be null
+  };
 
-    <Pressable onPress={onPressFunction} style={styles.addButton}>
-      <AddButton />
-    </Pressable>
-
-    <Modal visible={addTaskMenu} transparent animationType="fade">
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <AddTaskMenu
-            addTaskMenu={addTaskMenu}
-            setaddTaskMenu={setaddTaskMenu}
-          />
-        </View>
+  return (
+    <View style={styles.container}>
+      <View>
+        <Button title="test" onPress={handleTest} />
       </View>
-    </Modal>
-  </View>
-);
+      <Nav />
+
+      {tasks.length > 0 && (
+        <FlatList
+          style={styles.flatlist}
+          contentContainerStyle={{ gap: 10 }}
+          data={tasks}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <Task task={item} />}
+        />
+      )}
+
+      <Pressable onPress={onPressFunction} style={styles.addButton}>
+        <AddButton />
+      </Pressable>
+
+      <Modal visible={addTaskMenu} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <AddTaskMenu
+              addTaskMenu={addTaskMenu}
+              setaddTaskMenu={setaddTaskMenu}
+            />
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+}
 
 const getStyles = (colors) =>
   StyleSheet.create({
-    checkBorder: {
-      borderWidth: 1,
-      borderColor: "green",
-    },
-
     container: {
       flex: 1,
       backgroundColor: colors.background,

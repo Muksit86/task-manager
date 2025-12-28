@@ -4,14 +4,17 @@ import Icon from "react-native-vector-icons/Ionicons";
 import React, { useContext } from "react";
 import { Sun, SunDim } from "lucide-react-native";
 import { ThemeContext } from "../context/ThemeContext";
+import { UsernameContext } from "../context/usernameContext";
 
 const Nav = () => {
   const { colors, toggleTheme } = useContext(ThemeContext);
+  const { username } = useContext(UsernameContext);
+
   const styles = getStyles(colors);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hi Muksit,</Text>
+      <Text style={styles.text}>Hi {username},</Text>
       <Pressable onPress={toggleTheme}>
         <Sun color="black" size={40} />
       </Pressable>
