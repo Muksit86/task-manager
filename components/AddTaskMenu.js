@@ -12,14 +12,13 @@ import { Calendar, Save, X } from "lucide-react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { TaskContext } from "../context/TaskContext";
 import { ThemeContext } from "../context/ThemeContext";
-import { addTask, getAllTasks } from "../database/TaskDb";
 import { scheduleTaskNotification } from "../Notificatiions/Notification";
 
 export default function AddTaskMenu({ setaddTaskMenu }) {
-  const { colors, toggleTheme } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
-  const { tasks, addTask } = useContext(TaskContext);
+  const { addTask } = useContext(TaskContext);
 
   const [newTask, setNewTask] = useState({
     id: null,
@@ -27,14 +26,18 @@ export default function AddTaskMenu({ setaddTaskMenu }) {
     title: "",
   });
 
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+
   const openDatePicker = () => {
     if (Platform.OS !== "android") return;
 
     DateTimePickerAndroid.open({
-      value: new Date(),
+      value: tomorrow,
       mode: "date",
       display: "default",
-      minimumDate: new Date(),
+      minimumDate: tomorrow,
       is24Hour: true,
       onChange: (event, selectedDate) => {
         if (event.type === "set" && selectedDate) {
@@ -52,16 +55,9 @@ export default function AddTaskMenu({ setaddTaskMenu }) {
       Alert.alert("Missing title", "Task title is required");
       return;
     }
-
     try {
-      const id = Date.now().toString();
-      const date = newTask.date.toLocaleDateString("en-GB", {
-        month: "short",
-        day: "numeric",
-      });
-
-      await addTask(newTask.title, date);
-      await scheduleTaskNotification(newTask.date);
+      await addTask(newTask);
+      await scheduleTaskNotification(newTask);
     } catch (error) {
       console.log(error);
     }

@@ -22,17 +22,18 @@ export const TaskProvider = ({ children }) => {
     loadTasks();
   }, []);
 
-  const addTask = async (title, date) => {
+  const addTask = async (task) => {
+    const date = task.date.toISOString();
     const id = Date.now().toString();
-    await dbAddTask(id, title, date);
-
+    await dbAddTask(id, task.title, date);
     const updatedTasks = await getAllTasks();
     setTask(updatedTasks);
   };
 
-  const updateTask = async (title, date, id) => {
-    await dbUpdateTask(title, date, id);
-
+  const updateTask = async (editTask, id) => {
+    console.log(editTask);
+    const newDate = editTask.date.toISOString();
+    await dbUpdateTask(editTask.title, newDate, id);
     const updatedTasks = await getAllTasks();
     setTask(updatedTasks);
   };

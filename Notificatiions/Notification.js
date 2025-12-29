@@ -1,7 +1,8 @@
 import * as Notifications from "expo-notifications";
 
 export const scheduleTaskNotification = async (task) => {
-  const triggerDate = task.date;
+  console.log("This is notification date: ", task.date);
+  const triggerDate = new Date(task.date);
 
   await Notifications.scheduleNotificationAsync({
     content: {

@@ -6,7 +6,7 @@ import { Modal } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
 
 const Task = ({ task }) => {
-  const { colors, toggleTheme } = useContext(ThemeContext);
+  const { colors } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
   const [editTaskMenu, setEditTaskMenu] = useState(false);
@@ -15,12 +15,17 @@ const Task = ({ task }) => {
     setEditTaskMenu(true);
   };
 
+  const formattedDate = new Date(task.date).toLocaleDateString("en-GB", {
+    month: "short",
+    day: "numeric",
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.dateContainer}>
         <View style={styles.calenderDiv}>
           <Calendar color="black" />
-          <Text style={styles.text}>{task.date}</Text>
+          <Text style={styles.text}>{formattedDate}</Text>
         </View>
         <Pressable onPress={handleEditTask}>
           <View

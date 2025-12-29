@@ -14,8 +14,9 @@ import AddTaskMenu from "./components/AddTaskMenu";
 import { TaskContext } from "./context/TaskContext.js";
 import { ThemeContext } from "./context/ThemeContext.js";
 import * as Notifications from "expo-notifications";
-import WelcomeScreen from "./WelcomeScreen.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UsernameContext } from "./context/usernameContext.js";
+import { dbDeleteTask } from "./database/TaskDb.js";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -43,17 +44,15 @@ export default function MainApp() {
 
   const [addTaskMenu, setaddTaskMenu] = useState(false);
   const { tasks } = useContext(TaskContext);
+  const { setUsername } = useContext(UsernameContext);
 
   const onPressFunction = () => {
     setaddTaskMenu(!addTaskMenu);
   };
 
   const handleTest = async () => {
-    console.log("Working..");
     await AsyncStorage.removeItem("username");
-
-    const value = await AsyncStorage.getItem("username");
-    console.log(value); // should be null
+    setUsername(null);
   };
 
   return (
@@ -101,8 +100,6 @@ const getStyles = (colors) =>
       width: "100%",
       paddingVertical: 50,
       position: "relative",
-      borderWidth: 1,
-      borderColor: "green",
       alignItems: "center",
     },
 

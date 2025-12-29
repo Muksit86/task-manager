@@ -7,13 +7,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UsernameContext } from "./context/usernameContext";
 
 const WelcomeScreen = () => {
-  const { username, setUsername } = useContext(UsernameContext);
+  const { setUsername } = useContext(UsernameContext);
+  const [nameInput, setNameInput] = useState('')
   const { colors } = useContext(ThemeContext);
   const styles = getStyles(colors);
 
   const handleSaveName = async () => {
     try {
-      await AsyncStorage.setItem("username", username);
+      await AsyncStorage.setItem("username", nameInput);
+      setUsername(nameInput)
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +31,7 @@ const WelcomeScreen = () => {
         </View>
 
         <TextInput
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setNameInput(text)}
           style={styles.titleInput}
           multiline
           placeholder="Enter your name"

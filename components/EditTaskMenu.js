@@ -23,18 +23,22 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
 
   const [editTask, seteditTask] = useState({
     id: task.id,
-    date: task.date,
+    date: task.date instanceof Date ? task.date : new Date(task.date),
     title: task.title,
   });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const minDate = editTask.date > today ? editTask.date : tomorrow;
 
   const openDatePicker = () => {
     if (Platform.OS !== "android") return;
 
     DateTimePickerAndroid.open({
-      value: new Date(),
+      value: editTask.date,
       mode: "date",
       display: "default",
-      minimumDate: new Date(),
+      minimumDate: minDate,
       is24Hour: true,
       onChange: (event, selectedDate) => {
         if (event.type === "set" && selectedDate) {
@@ -54,7 +58,7 @@ export default function AddTaskMenu({ task, setEditTaskMenu }) {
     }
 
     try {
-      await updateTask(editTask.title, editTask.date, task.id);
+      await updateTask(editTask, task.id);
       setEditTaskMenu(false);
     } catch (error) {
       console.log(error);

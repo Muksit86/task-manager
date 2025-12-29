@@ -6,12 +6,12 @@ export const UsernameProvider = ({ children }) => {
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    const Username = async () => {
-      const savdedUser = await AsyncStorage.getItem("username");
-      setUsername(savdedUser);
+    const loadUsername = async () => {
+      const savedUsername = await AsyncStorage.getItem("username");
+      console.log(savedUsername);
+      setUsername(savedUsername);
     };
-
-    Username();
+    loadUsername();
   }, []);
 
   return (
