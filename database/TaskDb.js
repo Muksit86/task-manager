@@ -3,6 +3,7 @@ import * as SqlLite from "expo-sqlite";
 export const db = SqlLite.openDatabaseSync("tasks.db");
 
 export const initDb = async () => {
+  console.log("Table created inside initDb function");
   await db.execAsync(
     `CREATE TABLE IF NOT EXISTS tasks (
         id TEXT PRIMARY KEY NOT NULL,
@@ -12,8 +13,8 @@ export const initDb = async () => {
   );
 };
 
-export const dbDeleteTask = async () => {
-  await db.runAsync(`DROP TABLE IF EXISTS tasks`);
+export const dbDeleteAllTask = async () => {
+  await db.runAsync(`DELETE FROM tasks`);
 };
 
 export const dbAddTask = async (id, title, date) => {

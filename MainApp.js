@@ -50,16 +50,8 @@ export default function MainApp() {
     setaddTaskMenu(!addTaskMenu);
   };
 
-  const handleTest = async () => {
-    await AsyncStorage.removeItem("username");
-    setUsername(null);
-  };
-
   return (
     <View style={styles.container}>
-      <View>
-        <Button title="test" onPress={handleTest} />
-      </View>
       <Nav />
 
       {tasks.length > 0 && (
